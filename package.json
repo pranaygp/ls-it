@@ -1,0 +1,29 @@
+{
+  "name": "ls-it",
+  "version": "1.0.0",
+  "description": "Todo list featuring event based automation",
+  "main": "index.js",
+  "repository": {
+    "url": "https://github.com/pranaygp/ls-it",
+    "type": "git"
+  },
+  "scripts": {
+    "types": "flow-typed install --overwrite",
+    "build": "flow-remove-types src/ --out-dir build/",
+    "prepublish": "yarn run build"
+  },
+  "devDependencies": {
+    "babel-eslint": "^7.2.3",
+    "eslint": "^3.19.0",
+    "eslint-plugin-flowtype": "^2.32.1",
+    "flow-bin": "^0.44.2",
+    "flow-remove-types": "^1.2.0"
+  },
+  "author": "Pranay Prakash <pranay.gp@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^0.16.1",
+    "lodash": "^4.17.4",
+    "youtube-api": "^2.0.8"
+  }
+}
