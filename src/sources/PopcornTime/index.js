@@ -1,11 +1,11 @@
 // @flow
 const axios = require('axios')
-const _= require('lodash')
+const _ = require('lodash')
 
 async function getData(config: { shows: Array<string> }): Promise<Array<any>>{
   const responses: Array<{ data: { episodes: Array<any> } }> = await Promise.all(config.shows.map((id: string) => axios('https://tv-v2.api-fetch.website/show/' + id)))
 
-  return _(responses).map(r => r.data.episodes).flatten().value()
+  return _.flatten(responses.map(r => r.data.episodes))
 }
 
 getData({ shows: ['tt4179452'] })
