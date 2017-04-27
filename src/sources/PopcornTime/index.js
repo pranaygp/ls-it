@@ -5,7 +5,7 @@ const _ = require('lodash')
 async function getData(config: { shows: Array<string> }): Promise<Array<any>>{
   const responses: Array<{ data: { episodes: Array<any> } }> = await Promise.all(config.shows.map((id: string) => axios('https://tv-v2.api-fetch.website/show/' + id)))
 
-  return _.flatten(responses.map(r => r.data.episodes))
+  return _.flatMap(responses, (r): Array<any> => r.data.episodes) 
 }
 
 getData({ shows: ['tt4179452'] })
