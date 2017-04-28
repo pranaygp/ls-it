@@ -4,7 +4,6 @@ const _ = require('lodash')
 
 const config = require('./config')
 
-// if(config.email) {
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
