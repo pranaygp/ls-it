@@ -1,8 +1,9 @@
 {
   "name": "ls-it",
   "version": "1.0.0",
+  "private": true,
   "description": "Todo list featuring event based automation",
-  "main": "index.js",
+  "main": "build/index.js",
   "repository": {
     "url": "https://github.com/pranaygp/ls-it",
     "type": "git"
@@ -24,6 +25,8 @@
   "dependencies": {
     "axios": "^0.16.1",
     "lodash": "^4.17.4",
+    "nodemailer": "^4.0.1",
+    "rx": "^4.1.0",
     "youtube-api": "^2.0.8"
   }
 }
