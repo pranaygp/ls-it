@@ -1,15 +1,33 @@
 const Rx = require('rx')
-const micro = require('micro')
+const Lien = require("lien");
+const uuid = require('uuid/v4');
 
-const source = new Rx.Subject()
+const source$ = new Rx.Subject()
 
 const PORT = 3000 //TODO: move to config
 
-const server = micro(async req => {
-  source.onNext(await micro.json(req))
-  return 'Got Data'
+let server = new Lien({
+    host: "localhost",
+    port: PORT
+});
+
+server.on("load", err => {
+    console.log(err || `Server started on port ${PORT}.`);
+    err && process.exit(1);
+});
+
+server.addPage("/", lien => {
+  const endpoint = uuid();
+
+  server.addPage("/" + endpoint, "post", l => {
+    source$.onNext(l.req.body)
+    l.end("Got it!")
+  })
+
+  lien.end("Added enpoint at " + endpoint)
 })
 
-server.listen(PORT)
+module.exports = source$
 
-module.exports = source
+source$
+  .subscribe(console.log)
