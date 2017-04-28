@@ -24,11 +24,11 @@
   "license": "MIT",
   "dependencies": {
     "axios": "^0.16.1",
+    "jsonfile": "^3.0.0",
     "lien": "^2.3.0",
     "lodash": "^4.17.4",
     "nodemailer": "^4.0.1",
     "rx": "^4.1.0",
-    "uuid": "^3.0.1",
-    "youtube-api": "^2.0.8"
+    "uuid": "^3.0.1"
   }
 }

@@ -1,3 +1,5 @@
+// @flow
 module.exports = {
-  PopcornTimeEvents$: require('./events/PopcornTime')
+  PopcornTimeEvents$: require('./events/PopcornTime'),
+  TestWebhooksSource$: require('./events/TestWebhook')
 }

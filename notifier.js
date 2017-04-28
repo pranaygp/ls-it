@@ -1,4 +1,4 @@
-const { PopcornTimeEvents$ } = require('./')
+const { PopcornTimeEvents$, TestWebhooksSource$ } = require('./')
 const nodemailer = require('nodemailer');
 const _ = require('lodash')
 
@@ -34,3 +34,6 @@ PopcornTimeEvents$
       console.log('Email Message sent!');
     });
   })
+
+TestWebhooksSource$
+  .subscribe(console.log)
