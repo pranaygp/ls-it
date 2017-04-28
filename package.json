@@ -25,6 +25,7 @@
   "dependencies": {
     "axios": "^0.16.1",
     "lodash": "^4.17.4",
+    "micro": "^7.3.2",
     "nodemailer": "^4.0.1",
     "rx": "^4.1.0",
     "youtube-api": "^2.0.8"
