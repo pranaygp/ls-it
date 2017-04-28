@@ -1,3 +1,3 @@
 module.exports = {
-  PopcornTimeEvents: require('./events/PopcornTime')
+  PopcornTimeEvents$: require('./events/PopcornTime')
 }

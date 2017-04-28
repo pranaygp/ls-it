@@ -1,4 +1,4 @@
-const { PopcornTimeEvents } = require('./')
+const { PopcornTimeEvents$ } = require('./')
 const nodemailer = require('nodemailer');
 const _ = require('lodash')
 
@@ -13,7 +13,7 @@ const transporter = nodemailer.createTransport({
 });
 
 
-PopcornTimeEvents
+PopcornTimeEvents$
   .map(episodes => episodes.sort((e1, e2) => e1.first_aired - e2.first_aired))
   // .subscribe(console.log)
   .subscribe(episodes => {
