@@ -8,7 +8,7 @@ const ALIAS_FILE = path.join(__dirname, '../../webhooks-alias.json')
 const PORT = 3000 //TODO: move to config
 
 let server = new Lien({
-    host: "localhost",
+    host: "0.0.0.0",  // DigitalOcean can't use anything else
     port: PORT
 });
 
