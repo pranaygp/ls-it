@@ -1,6 +1,8 @@
 # ls-it
 A new idea for a to-do list that features event based automation
 
+[![Known Vulnerabilities](https://snyk.io/test/github/pranaygp/ls-it/badge.svg)](https://snyk.io/test/github/pranaygp/ls-it)
+
 ## WIP
 
 
