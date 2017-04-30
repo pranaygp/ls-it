@@ -10,6 +10,7 @@ You'll need a config.js file in `/` that looks like this:
 
 ```js
 module.exports = {
+  port: 3000,
   email: {
     user: 'GMAIL_EMAIL',
     pass: 'GMAIL_PASSWORD'
