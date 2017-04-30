@@ -5,13 +5,13 @@ const jsonfile = require('jsonfile')
 const path = require('path')
 
 const event = require('../event')
+const config = require('../../../config')
 
 const ALIAS_FILE = path.join(__dirname, '../../../webhooks-alias.json')
-const PORT = 3000 //TODO: move to config
 
 let server = new Lien({
     host: "0.0.0.0",  // DigitalOcean can't use anything else
-    port: PORT
+    port: config.PORT || 3000
 });
 
 const Source$ = new Rx.Subject()
