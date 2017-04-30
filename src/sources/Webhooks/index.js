@@ -8,10 +8,11 @@ const event = require('../event')
 const config = require('../../../config')
 
 const ALIAS_FILE = path.join(__dirname, '../../../webhooks-alias.json')
+const PORT = config.port || 3000
 
 let server = new Lien({
     host: "0.0.0.0",  // DigitalOcean can't use anything else
-    port: config.port || 3000
+    port: PORT
 });
 
 const Source$ = new Rx.Subject()
