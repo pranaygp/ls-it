@@ -1,4 +1,4 @@
-const { PopcornTimeEvents$, TestWebhooksSource$, LsItEventSource$ } = require('./')
+const { PopcornTimeEvents$, TestWebhooksSource$, LsItEventSource$ } = require('./build/events')
 const nodemailer = require('nodemailer');
 const _ = require('lodash')
 

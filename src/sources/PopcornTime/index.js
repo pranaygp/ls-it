@@ -1,17 +1,26 @@
 // @flow
+const Rx = require('rx')
 const axios = require('axios')
 const _ = require('lodash')
 
-async function getData(config: { shows: Array<string> }): Promise<Array<any>>{
-  try{
-    const responses: Array<{ data: { episodes: Array<any>, title: string } }> = await Promise.all(config.shows.map((id: string) => axios('https://tv-v2.api-fetch.website/show/' + id)))
+const event = require('../event')
 
-    return _.flatMap(responses, (r): Array<any> => r.data.episodes.map(episode => Object.assign({}, episode, { title: r.data.title }))) 
+// const INTERVAL: number = 1000 * 60 * 60  * 1// 1 hour TODO: Move to config
+const INTERVAL: number = 1000 * 3 // 3 seconds
 
-  } catch(e){
-    console.error("Failed to fetch Popcorn Time stuff")
-    return []
-  }
-}
+const Source$ = Rx.Observable
+  .interval(INTERVAL)
+  .exhaustMap(Promise.all(['tt4179452', 'tt3530232', 'tt2575988'].map((id: string) => axios('https://tv-v2.api-fetch.website/show/' + id))))
+  .map(resps => resps.map(resp => resp.data))
+  .map(resps => resps.map(show => show.episodes.map(episode => Object.assign({}, episode, {title: show.title}))))
+  .map(showEpisodes => _.flatten(showEpisodes))
+  .pairwise()
+  .map(([a, b]) => _.differenceBy(b, a, 'tvdb_id'))
+  .flatMap(episodes => episodes)
+  .map(event.bind({}, "popcorn-time"))
+  
 
-module.exports = getData
+Source$
+  .subscribe(ep => console.log(`${ep.title} S${ep.season}E${ep.episode}`))
+
+module.exports = Source$

@@ -4,7 +4,9 @@ const uuid = require('uuid/v4');
 const jsonfile = require('jsonfile')
 const path = require('path')
 
-const ALIAS_FILE = path.join(__dirname, '../../webhooks-alias.json')
+const event = require('../event')
+
+const ALIAS_FILE = path.join(__dirname, '../../../webhooks-alias.json')
 const PORT = 3000 //TODO: move to config
 
 let server = new Lien({
@@ -12,13 +14,13 @@ let server = new Lien({
     port: PORT
 });
 
-const source$ = new Rx.Subject()
+const Source$ = new Rx.Subject()
 
 const aliases = jsonfile.readFileSync(ALIAS_FILE)
 
 const addEndpoint = (endpoint, alias) => {
   server.addPage("/" + endpoint, "post", l => {
-    source$.onNext({ data: l.req.body, endpoint, alias})
+    Source$.onNext(event("webhooks", { data: l.req.body, endpoint, alias}))
     l.end("Got it!")
   })
   console.log(`Created endpoint at: ${endpoint} alias to ${alias}`)
@@ -33,7 +35,7 @@ server.on("load", err => {
     err && process.exit(1);
 });
 
-server.addPage("/", "post", lien => {
+server.addPage("/gen", "post", lien => {
   if(!lien.req.body.alias){
     lien.end(`Missing "alias" string in POST request`)
     return;
@@ -51,4 +53,4 @@ server.addPage("/", "post", lien => {
   lien.end("Added enpoint at " + endpoint)
 })
 
-module.exports = source$
+module.exports = Source$.asObservable()
