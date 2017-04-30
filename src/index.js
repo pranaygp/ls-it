@@ -23,7 +23,7 @@ function sendMail(subject, text) {
       text
     };
 
-  transporter.sendMail(mailOptions, (error, info) => {
+  transporter.sendMail(mailOptions, error => {
     if (error) {
       return console.log(error);
     }
@@ -31,7 +31,7 @@ function sendMail(subject, text) {
   });
 }
 
-const List$ = Rx.Observable
+Rx.Observable
   .merge(_.map(Sources, _.identity))
   .startWith([])
   .scan(reducer)
