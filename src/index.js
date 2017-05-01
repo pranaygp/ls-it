@@ -52,7 +52,7 @@ Rx.Observable
   .distinctUntilChanged()
   .do(list => currentList = list) // HACK: side effect to store list for incoming client connections
   .subscribe(list => {
-    // sendMail("TODO list", list.join('\n'))
+    sendMail("TODO list", list.map(entry => entry.item).join('\n'))
     wss.broadcast(JSON.stringify(list))
   })
 
