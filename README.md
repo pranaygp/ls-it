@@ -25,3 +25,10 @@ You'll need a webhooks-alias.json file in `/` that looks like this:
 ```json
 []
 ```
+
+You'll need a todo-list.json file in `/` that looks like this:
+
+```json
+[]
+```
+
