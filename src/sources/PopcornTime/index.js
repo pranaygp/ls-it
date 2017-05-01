@@ -14,10 +14,12 @@ const Source$ = Rx.Observable
   .map(resps => resps.map(resp => resp.data))
   .map(resps => resps.map(show => show.episodes.map(episode => Object.assign({}, episode, {title: show.title}))))
   .map(showEpisodes => _.flatten(showEpisodes))
-  .pairwise()
   .map(([a, b]) => _.differenceBy(b, a, 'tvdb_id'))
+  .do(console.log)
   .flatMap(episodes => episodes)
   .map(event.bind({}, "popcorn-time"))
+  .publish()
+  .refCount()
   
 
 Source$
