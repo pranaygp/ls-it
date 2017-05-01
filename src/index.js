@@ -2,13 +2,17 @@ const Rx = require('rx')
 const _ = require('lodash')
 const WebSocket = require('ws');
 const nodemailer = require('nodemailer');
+const server = require('./sources/Webhooks/server')
 
 const reducer = require('./reducer')
 const Sources = require('./sources')
 
 const config = require('../config')
-const wss = new WebSocket.Server({ port: config.ws.port });
-console.log("Webscokets Broadcasting at port ", config.ws.port)
+const wss = new WebSocket.Server({ 
+  // port: config.ws.port 
+  server: server
+});
+console.log("Webscokets Broadcasting")
 
 
 // Monkeypatch broadcast to all.

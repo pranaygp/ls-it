@@ -1,5 +1,8 @@
 const Rx = require('rx')
-const Lien = require("lien");
+const express = require("express");
+const bodyParser = require('body-parser')
+const cors = require('cors')
+const server = require('./server')
 const uuid = require('uuid/v4');
 const jsonfile = require('jsonfile')
 const path = require('path')
@@ -10,23 +13,20 @@ const config = require('../../../config')
 const ALIAS_FILE = path.join(__dirname, '../../../webhooks-alias.json')
 const PORT = config.port || 3000
 
-let server = new Lien({
-    host: "0.0.0.0",  // DigitalOcean can't use anything else
-    port: PORT
-});
+const app = express()
 
 const Source$ = new Rx.Subject()
 
 const aliases = jsonfile.readFileSync(ALIAS_FILE)
 
-const addEndpoint = (endpoint, alias) => {
-  server.addPage("/" + endpoint,  l => {
-    Source$.onNext(event("webhooks", { data: l.req.body, endpoint, alias}))
+app.use(cors())
+app.use( bodyParser.json() )
 
-    l.end("Got it!", 200, "text", {
-      "Access-Control-Allow-Origin": "*",
-      "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept"
-    })
+const addEndpoint = (endpoint, alias) => {
+  app.post("/" + endpoint,  (req, res) => {
+    Source$.onNext(event("webhooks", { data: req.body, endpoint, alias}))
+
+    res.send("Got it!")
   })
   console.log(`Created endpoint at: ${endpoint} alias to ${alias}`)
 }
@@ -35,37 +35,32 @@ aliases.forEach(([endpoint, alias]) => {
   addEndpoint(endpoint, alias)
 })
 
-server.on("load", err => {
-    console.log(err || `Server started on port ${PORT}.`);
-    err && process.exit(1);
-});
+app.post("/gen", (req, res) => {
 
-server.addPage("/gen", lien => {
-
-  if(!lien.req.body.alias){
-    lien.end(`Missing "alias" string in POST request`, 200, "text", {
-      "Access-Control-Allow-Origin": "*",
-      "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept"
-    })
+  if(!req.body.alias){
+    res.send(`Missing "alias" string in POST request`)
     return;
   }
-  if(aliases.map(x => x[1]).indexOf(lien.req.body.alias) > -1){
-    lien.end(`Duplicate "alias". Maybe try "${lien.req.body.alias}-2"`, 200, "text", {
-      "Access-Control-Allow-Origin": "*",
-      "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept"
-    })
+  if(aliases.map(x => x[1]).indexOf(req.body.alias) > -1){
+    res.send(`Duplicate "alias". Maybe try "${req.body.alias}-2"`)
     return;
   }
   const endpoint = uuid();
-  aliases.push([endpoint, lien.req.body.alias])
+  aliases.push([endpoint, req.body.alias])
   jsonfile.writeFile(ALIAS_FILE, aliases)
   
-  addEndpoint(endpoint, lien.req.body.alias)
+  addEndpoint(endpoint, req.body.alias)
 
-  lien.end("Added enpoint at " + endpoint, 200, "text", {
-      "Access-Control-Allow-Origin": "*",
-      "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept"
-    })
+  res.send("Added enpoint at " + endpoint)
 })
+
+
+server
+  .on('request', app)
+
+server  
+  .listen(PORT, () => {
+    console.log(`Server started on port ${PORT}.`);
+  })
 
 module.exports = Source$.asObservable()
