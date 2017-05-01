@@ -1,6 +1,5 @@
 const Rx = require('rx')
 const Lien = require("lien");
-const cors = require('cors')
 const uuid = require('uuid/v4');
 const jsonfile = require('jsonfile')
 const path = require('path')
@@ -21,10 +20,14 @@ const Source$ = new Rx.Subject()
 const aliases = jsonfile.readFileSync(ALIAS_FILE)
 
 const addEndpoint = (endpoint, alias) => {
-  server.addPage("/" + endpoint, "post", l => {
+  server.addPage("/" + endpoint, "post",  l => {
+    l.header("Access-Control-Allow-Origin", "*");
+    l.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+
     Source$.onNext(event("webhooks", { data: l.req.body, endpoint, alias}))
+    
     l.end("Got it!")
-  }, cors())
+  })
   console.log(`Created endpoint at: ${endpoint} alias to ${alias}`)
 }
 
@@ -38,6 +41,9 @@ server.on("load", err => {
 });
 
 server.addPage("/gen", "post", lien => {
+  lien.header("Access-Control-Allow-Origin", "*");
+  lien.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+
   if(!lien.req.body.alias){
     lien.end(`Missing "alias" string in POST request`)
     return;
@@ -53,6 +59,6 @@ server.addPage("/gen", "post", lien => {
   addEndpoint(endpoint, lien.req.body.alias)
 
   lien.end("Added enpoint at " + endpoint)
-}, cors())
+})
 
 module.exports = Source$.asObservable()
