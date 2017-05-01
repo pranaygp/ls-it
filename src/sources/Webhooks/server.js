@@ -1,17 +1,26 @@
 const http = require('http');
-const crypto = require('crypto')
+const https = require('https');
 const fs = require('fs')
 const config = require('../../../config.js')
 
-const server = http.createServer()
 
 if(config.cert){
-  const privateKey = fs.readFileSync(config.cert.key).toString();
-  const certificate = fs.readFileSync(config.cert.cert).toString();
+  const privateKey = fs.readFileSync(config.cert.key)
+  const certificate = fs.readFileSync(config.cert.cert)
 
-  const credentials = crypto.createCredentials({key: privateKey, cert: certificate});
+  const credentials = {key: privateKey, cert: certificate}
 
-  server.setSecure(credentials)
+  module.exports = https.createServer(credentials)
+} else {
+  module.exports = http.createServer()
 }
 
-module.exports = server
+
+
+// // getServer
+// module.exports = app => {
+//   if(server)
+//     return server
+//   server = https.createServer(app)
+//   return server
+// }
