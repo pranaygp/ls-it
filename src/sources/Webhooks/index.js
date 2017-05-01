@@ -21,12 +21,11 @@ const aliases = jsonfile.readFileSync(ALIAS_FILE)
 
 const addEndpoint = (endpoint, alias) => {
   server.addPage("/" + endpoint, "post",  l => {
-    l.header("Access-Control-Allow-Origin", "*");
-    l.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-
     Source$.onNext(event("webhooks", { data: l.req.body, endpoint, alias}))
-    
-    l.end("Got it!")
+
+    l.end("Got it!", 200, "text", {
+      "Access-Control-Allow-Origin": "*"
+    })
   })
   console.log(`Created endpoint at: ${endpoint} alias to ${alias}`)
 }
@@ -41,15 +40,17 @@ server.on("load", err => {
 });
 
 server.addPage("/gen", "post", lien => {
-  lien.header("Access-Control-Allow-Origin", "*");
-  lien.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
 
   if(!lien.req.body.alias){
-    lien.end(`Missing "alias" string in POST request`)
+    lien.end(`Missing "alias" string in POST request`, 200, "text", {
+      "Access-Control-Allow-Origin": "*"
+    })
     return;
   }
   if(aliases.map(x => x[1]).indexOf(lien.req.body.alias) > -1){
-    lien.end(`Duplicate "alias". Maybe try "${lien.req.body.alias}-2"`)
+    lien.end(`Duplicate "alias". Maybe try "${lien.req.body.alias}-2"`, 200, "text", {
+      "Access-Control-Allow-Origin": "*"
+    })
     return;
   }
   const endpoint = uuid();
@@ -58,7 +59,9 @@ server.addPage("/gen", "post", lien => {
   
   addEndpoint(endpoint, lien.req.body.alias)
 
-  lien.end("Added enpoint at " + endpoint)
+  lien.end("Added enpoint at " + endpoint, 200, "text", {
+      "Access-Control-Allow-Origin": "*"
+    })
 })
 
 module.exports = Source$.asObservable()
