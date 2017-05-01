@@ -1,13 +1,17 @@
 const Rx = require('rx')
 const _ = require('lodash')
+const path= require('path')
 const WebSocket = require('ws');
 const nodemailer = require('nodemailer');
-const server = require('./sources/Webhooks/server')
+const jsonfile = require('jsonfile')
 
+const server = require('./sources/Webhooks/server')
 const reducer = require('./reducer')
 const Sources = require('./sources')
 
 const config = require('../config')
+const TODO_LIST_FILE = path.join(__dirname, '../todo-list.json')
+
 const wss = new WebSocket.Server({ 
   // port: config.ws.port 
   server: server
@@ -48,13 +52,14 @@ function sendMail(subject, text) {
   });
 }
 
-let currentList = []
+let currentList = jsonfile.readFileSync(TODO_LIST_FILE)
 Rx.Observable
   .merge(_.map(Sources, _.identity))
   .startWith([])
   .scan(reducer)                  // gives us redux style state management
   .distinctUntilChanged()
   .do(list => currentList = list) // HACK: side effect to store list for incoming client connections
+  .do(list => jsonfile.writeFile(TODO_LIST_FILE, list))
   .subscribe(list => {
     // sendMail("TODO list", list.map(entry => entry.item).join('\n'))
     wss.broadcast(JSON.stringify(list))

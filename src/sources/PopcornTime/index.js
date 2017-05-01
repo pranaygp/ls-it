@@ -6,7 +6,7 @@ const _ = require('lodash')
 const event = require('../event')
 
 // const INTERVAL: number = 1000 * 60 * 60  * 1// 1 hour TODO: Move to config
-const INTERVAL: number = 1000 * 3 // 3 seconds
+const INTERVAL: number = 1000 * 60 * 2 // 2 minutes
 
 const Source$ = Rx.Observable
   .interval(INTERVAL)
