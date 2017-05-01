@@ -1,5 +1,6 @@
 const Rx = require('rx')
 const Lien = require("lien");
+const cors = require('cors')
 const uuid = require('uuid/v4');
 const jsonfile = require('jsonfile')
 const path = require('path')
@@ -23,7 +24,7 @@ const addEndpoint = (endpoint, alias) => {
   server.addPage("/" + endpoint, "post", l => {
     Source$.onNext(event("webhooks", { data: l.req.body, endpoint, alias}))
     l.end("Got it!")
-  })
+  }, cors())
   console.log(`Created endpoint at: ${endpoint} alias to ${alias}`)
 }
 
@@ -52,6 +53,6 @@ server.addPage("/gen", "post", lien => {
   addEndpoint(endpoint, lien.req.body.alias)
 
   lien.end("Added enpoint at " + endpoint)
-})
+}, cors())
 
 module.exports = Source$.asObservable()
