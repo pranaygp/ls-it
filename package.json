@@ -9,6 +9,7 @@
     "type": "git"
   },
   "scripts": {
+    "start": "node --harmony .",
     "types": "flow-typed install --overwrite",
     "build": "flow-remove-types src/ --out-dir build/",
     "prepublish": "yarn run build"
@@ -29,6 +30,7 @@
     "lodash": "^4.17.4",
     "nodemailer": "^4.0.1",
     "rx": "^4.1.0",
-    "uuid": "^3.0.1"
+    "uuid": "^3.0.1",
+    "ws": "^2.3.1"
   }
 }
