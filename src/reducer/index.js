@@ -17,7 +17,10 @@ module.exports = (list: Array<{_id: string, item: string}> = [], event: { type: 
       return list.concat([{ _id: uuid(), item: `${epTitle} S${season}E${episode}` }])
     case "ls-it-github":
       const { title: issueTitle } = event.payload.issue
-      return list.concat([{ _id: uuid(), item: `Ls It Github - Issue: ${issueTitle}` }])
+      const item = `Ls It Github - Issue: ${issueTitle}`
+      if(_.find(list, ['item', item]))
+        return list
+      return list.concat([{ _id: uuid(), item}])
     default:
       return list
   }
