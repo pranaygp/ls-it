@@ -5,13 +5,13 @@ const WebSocket = require('ws');
 const jsonfile = require('jsonfile')
 
 const server = require('./sources/Webhooks/server')
+const expressApp = require('./sources/Webhooks/expressApp')
 const reducer = require('./reducer')
 const Sources = require('./sources')
 
 const TODO_LIST_FILE = path.join(__dirname, '../todo-list.json')
 
 const wss = new WebSocket.Server({ 
-  // port: config.ws.port 
   server: server
 });
 console.log("Webscokets Broadcasting")
@@ -37,8 +37,13 @@ Rx.Observable
     wss.broadcast(JSON.stringify(list))
   })
 
-  wss.on('connection', client => {
-    if (client.readyState === WebSocket.OPEN) {
-      client.send(JSON.stringify(currentList));
-    }
+wss.on('connection', client => {
+  if (client.readyState === WebSocket.OPEN) {
+    client.send(JSON.stringify(currentList));
+  }
+})
+
+expressApp
+  .get('/list', (req, res) => {
+    res.send(currentList)
   })

@@ -1,26 +1,20 @@
 const Rx = require('rx')
-const express = require("express");
-const bodyParser = require('body-parser')
-const cors = require('cors')
 const server = require('./server')
 const uuid = require('uuid/v4');
 const jsonfile = require('jsonfile')
 const path = require('path')
 
+const app = require('./expressApp')
 const event = require('../event')
 const config = require('../../../config')
 
 const ALIAS_FILE = path.join(__dirname, '../../../webhooks-alias.json')
 const PORT = config.port || 3000
 
-const app = express()
 
 const Source$ = new Rx.Subject()
 
 const aliases = jsonfile.readFileSync(ALIAS_FILE)
-
-app.use(cors())
-app.use( bodyParser.json() )
 
 const addEndpoint = (endpoint, alias) => {
   app.post("/" + endpoint,  (req, res) => {
