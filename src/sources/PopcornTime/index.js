@@ -5,7 +5,7 @@ const _ = require('lodash')
 
 const event = require('../event')
 
-const INTERVAL = process.env.NODE_ENV == "production" ? 1000 * 60 * 60 : 1000 * 1 // 1 hour or 1 second
+const INTERVAL = process.env.NODE_ENV === "production" ? 1000 * 60 * 60 : 1000 * 1 // 1 hour or 1 second
 
 const Source$ = Rx.Observable
   .interval(INTERVAL)
