@@ -18,7 +18,7 @@ const aliases = jsonfile.readFileSync(ALIAS_FILE)
 
 const addEndpoint = (endpoint, alias) => {
   app.post("/" + endpoint,  (req, res) => {
-    Source$.onNext(event("webhooks", { data: req.body, endpoint, alias}))
+    Source$.next(event("webhooks", { data: req.body, endpoint, alias}))
 
     res.send("Got it!")
   })
