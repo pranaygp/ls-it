@@ -1,4 +1,4 @@
-const Rx = require('rx')
+const Rx = require('rxjs/Rx')
 const server = require('./server')
 const uuid = require('uuid/v4');
 const jsonfile = require('jsonfile')

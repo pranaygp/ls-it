@@ -1,4 +1,4 @@
-const Rx = require('rx')
+const Rx = require('rxjs/Rx')
 const _ = require('lodash')
 const path= require('path')
 const WebSocket = require('ws');
@@ -28,7 +28,6 @@ wss.broadcast = function broadcast(data) {
 let currentList = jsonfile.readFileSync(TODO_LIST_FILE)
 Rx.Observable
   .merge(_.map(Sources, _.identity))
-  .startWith([])
   .scan(reducer, currentList)                  // gives us redux style state management
   .distinctUntilChanged()
   .do(list => currentList = list) // HACK: side effect to store list for incoming client connections
