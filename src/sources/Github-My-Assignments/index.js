@@ -6,7 +6,7 @@ const GithubMyAssignments$ = Webhooks$
   .filter(x => x.alias === "github-unimp")
   .pluck('data')
   .filter(data => data.issue)
-  .filter(data => data.issue.asignee === "pranaygp")
+  .filter(data => data.issue.asignee.login === "pranaygp")
   .map(event.bind({}, "github"))
 
 module.exports = GithubMyAssignments$
