@@ -3,7 +3,7 @@ const Webhooks$ = require('../Webhooks')
 
 const Github$ = Webhooks$
   .pluck('payload')
-  .filter(x => x.alias === "ls-it-github")
+  .filter(x => x.alias === "github")
   .pluck('data')
   .filter(data => data.issue)
   .map(event.bind({}, "github"))
