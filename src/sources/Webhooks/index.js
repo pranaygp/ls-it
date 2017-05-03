@@ -57,4 +57,4 @@ server
     console.log(`Server started on port ${PORT}.`);
   })
 
-module.exports = Source$.asObservable()
+module.exports = Source$
