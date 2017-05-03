@@ -2,6 +2,7 @@
 module.exports = {
   PopcornTime$: require('./PopcornTime'),
   Webhooks$: require('./Webhooks'),
-  LsItGithub$: require('./Ls-It-Github'),
+  Github$: require('./Github'),
+  GithubMyAssignments$: require('./Github-My-Assignments'),
   ManualWebhook$: require('./ManualWebhook')
 }

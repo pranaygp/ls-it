@@ -1,11 +1,11 @@
 const event = require('../event')
 const Webhooks$ = require('../Webhooks')
 
-const LsItGithub$ = Webhooks$
+const Github$ = Webhooks$
   .pluck('payload')
   .filter(x => x.alias === "ls-it-github")
   .pluck('data')
   .filter(data => data.issue)
-  .map(event.bind({}, "ls-it-github"))
+  .map(event.bind({}, "github"))
 
-module.exports = LsItGithub$
+module.exports = Github$
