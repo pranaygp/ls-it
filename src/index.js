@@ -27,7 +27,7 @@ wss.broadcast = function broadcast(data) {
 
 let currentList = jsonfile.readFileSync(TODO_LIST_FILE)
 Rx.Observable
-  .merge(_.map(Sources, _.identity))
+  .merge.apply(Rx.Observable, _.map(Sources, _.identity))
   .scan(reducer, currentList)                  // gives us redux style state management
   .distinctUntilChanged()
   .do(list => currentList = list) // HACK: side effect to store list for incoming client connections
