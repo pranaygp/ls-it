@@ -16,8 +16,9 @@ module.exports = (list: Array<{_id: string, item: string}> = [], event: { type: 
       const { title: epTitle, season, episode } = event.payload
       return list.concat([{ _id: uuid(), item: `${epTitle} S${season}E${episode}` }])
     case "github":
-      const { issue: { title: issueTitle, html_url: issueURL }, repository: { name: repoName } } = event.payload
-      const item = `${repoName} - Issue: <a href="${issueURL}">${issueTitle}</a>`
+      const { title: issueTitle, html_url: issueURL } = event.payload.issue || event.payload.pull_request
+      const { name: repoName } = event.payload.repository
+      const item = `${repoName} - PR: <a href="${issueURL}">${issueTitle}</a>`
       if(_.find(list, ['item', item]))
         return list
       return list.concat([{ _id: uuid(), item}])
