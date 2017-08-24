@@ -22,6 +22,8 @@ module.exports = (list: Array<{_id: string, item: string}> = [], event: { type: 
       if(_.find(list, ['item', item]))
         return list
       return list.concat([{ _id: uuid(), item}])
+    case "shipping":
+      return list.concat([{ _id: uuid(), item: 'Package status: ' + event.payload.status}])
     default:
       return list
   }
