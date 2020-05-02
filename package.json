@@ -13,7 +13,8 @@
     "types": "flow-typed install --overwrite",
     "build": "flow-remove-types src/ --out-dir build/",
     "test": "jest",
-    "prepublish": "yarn run build"
+    "prepublish": "yarn run snyk-protect && yarn run build",
+    "snyk-protect": "snyk protect"
   },
   "devDependencies": {
     "babel-eslint": "^7.2.3",
@@ -34,6 +35,8 @@
     "lodash": "^4.17.4",
     "rxjs": "^5.3.1",
     "uuid": "^3.0.1",
-    "ws": "^2.3.1"
-  }
+    "ws": "^2.3.1",
+    "snyk": "^1.316.2"
+  },
+  "snyk": true
 }
